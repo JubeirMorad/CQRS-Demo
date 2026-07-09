@@ -1,4 +1,8 @@
+
+using Application.Behaviors;
+using FluentValidation;
 using Infrastructure.DataAccess;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +14,13 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data source = app.db"));
+
+builder.Services.AddMediatR(options =>
+    options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
+
+builder.Services.AddValidatorsFromAssembly(typeof(Application.IAssemblyMarker).Assembly);
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>) , typeof(ValidationsBehaviors<,>)) ;
 
 var app = builder.Build();
 
