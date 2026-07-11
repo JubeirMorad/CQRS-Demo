@@ -1,5 +1,6 @@
 
 using Application.Behaviors;
+using Application.Common.Interfaces;
 using FluentValidation;
 using Infrastructure.DataAccess;
 using MediatR;
@@ -13,7 +14,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite("Data source = app.db"));
+builder.Services.AddDbContext<IAppDbContext, AppDbContext>(options => options.UseSqlite("Data source = app.db"));
 
 builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
