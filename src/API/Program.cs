@@ -1,4 +1,5 @@
 
+using API.Exceptions;
 using Application.Behaviors;
 using Application.Common.Interfaces;
 using FluentValidation;
@@ -16,6 +17,8 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<IAppDbContext, AppDbContext>(options => options.UseSqlite("Data source = app.db"));
 
+builder.Services.AddExceptionHandler<GlobalExceptionsHandler>();
+
 builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
 
@@ -24,6 +27,8 @@ builder.Services.AddValidatorsFromAssembly(typeof(Application.IAssemblyMarker).A
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>) , typeof(ValidationsBehaviors<,>)) ;
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

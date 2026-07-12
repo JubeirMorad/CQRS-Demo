@@ -1,3 +1,4 @@
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -18,7 +19,7 @@ namespace Application.Features.Todos.Queries.GetTodoById
             Todo? todo = await appDbContext.todos.FindAsync(request.id, cancellationToken);
 
             if (todo is null)
-                throw new Exception("Todo was not found.");
+                throw new NotFoundException(nameof(Todo), request.id);
 
             return todo;
         }
