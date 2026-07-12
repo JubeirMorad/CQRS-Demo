@@ -5,6 +5,7 @@ using Application.Common.Interfaces;
 using FluentValidation;
 using Infrastructure.DataAccess;
 using MediatR;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<IAppDbContext, AppDbContext>(options => options.UseSqlite("Data source = app.db"));
 
 builder.Services.AddExceptionHandler<GlobalExceptionsHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssembly(typeof(Application.IAssemblyMarker).Assembly));
